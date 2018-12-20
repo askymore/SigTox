@@ -21,8 +21,10 @@ import android.arch.lifecycle.DefaultLifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDexApplication;
 
@@ -63,12 +65,18 @@ import org.webrtc.voiceengine.WebRtcAudioManager;
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 import org.whispersystems.libsignal.logging.SignalProtocolLoggerProvider;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
+import chat.tox.antox.activities.CreateAccountActivity;
+import chat.tox.antox.data.State;
+import chat.tox.antox.data.UserDB;
+import chat.tox.antox.tox.ToxService;
+import chat.tox.antox.tox.ToxSingleton;
 import dagger.ObjectGraph;
 
 /**
@@ -119,6 +127,21 @@ public class ApplicationContext extends MultiDexApplication implements Dependenc
     initializeUnidentifiedDeliveryAbilityRefresh();
     NotificationChannels.create(this);
     ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+    initTox();
+  }
+
+  public void initTox(){
+       CreateAccountActivity ca = new CreateAccountActivity(this);
+      ca.onCreateAccount("dududdadidu");
+      File path = Environment.getDataDirectory();
+      try {
+        ToxSingleton.exportDataFile(path);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+
+    Intent startTox = new Intent(getApplicationContext(),ToxService.class);
+    startService(startTox);
   }
 
   @Override
