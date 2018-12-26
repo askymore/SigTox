@@ -74,20 +74,6 @@ class CreateAccountActivity (ctx:Context)  {
       Option(toxData)
     } catch {
       case error: ToxNewException =>
-        if (error.code == ToxNewException.Code.LOAD_ENCRYPTED) {
-          Toast.makeText(
-            ctx,
-            "error",
-            Toast.LENGTH_SHORT
-          ).show()
-        } else {
-          Toast.makeText(
-            ctx,
-            "error",
-            Toast.LENGTH_SHORT
-          ).show()
-        }
-
         None
     }
   }
@@ -99,13 +85,10 @@ class CreateAccountActivity (ctx:Context)  {
     if (!validAccountName(toxMeName.username)) {
       //      showBadAccountNameError()
     } else if (userDb.doesUserExist(toxMeName.username)) {
-      val context = ctx.getApplicationContext
-      val text = "dududud"    //todo
-      val duration = Toast.LENGTH_LONG
-      val toast = Toast.makeText(context, text, duration)
-      toast.show()
+      AntoxLog.debug("loading  Tox account.")
+      loginAndStartMain(toxMeName.username, "")
     } else {
-      //      disableRegisterButton()
+
 
       val toxData =
         if (shouldCreateDataFile) {

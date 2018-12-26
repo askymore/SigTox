@@ -28,6 +28,9 @@ import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.ThreadDatabase;
 import org.thoughtcrime.securesms.recipients.Recipient;
 
+import chat.tox.antox.activities.AddActivity;
+import chat.tox.antox.utils.Constants;
+
 /**
  * Activity container for starting a new conversation.
  *
@@ -87,7 +90,9 @@ public class NewConversationActivity extends ContactSelectionActivity {
   }
 
   private void handleInvite() {
-    startActivity(new Intent(this, InviteActivity.class));
+//    startActivity(new Intent(this, InviteActivity.class));
+    Intent intent = new Intent(this, AddActivity.class);
+    startActivityForResult(intent, Constants.ADD_FRIEND_REQUEST_CODE());
   }
 
   @Override

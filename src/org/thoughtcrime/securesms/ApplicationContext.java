@@ -98,6 +98,7 @@ public class ApplicationContext extends MultiDexApplication implements Dependenc
   private IncomingMessageObserver incomingMessageObserver;
   private ObjectGraph             objectGraph;
   private PersistentLogger        persistentLogger;
+  private String                  accoutName ;
 
   private volatile boolean isAppVisible;
 
@@ -130,18 +131,25 @@ public class ApplicationContext extends MultiDexApplication implements Dependenc
     initTox();
   }
 
-  public void initTox(){
-       CreateAccountActivity ca = new CreateAccountActivity(this);
-      ca.onCreateAccount("dududdadidu");
-      File path = Environment.getDataDirectory();
-      try {
-        ToxSingleton.exportDataFile(path);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+  public  void initTox(){
+    accoutName = new String("dududdadidu");
+    AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+      @Override
+      protected Void doInBackground(Void... params) {
+        CreateAccountActivity ca = new CreateAccountActivity(ApplicationContext.this);
+        ca.onCreateAccount(accoutName);
 
-    Intent startTox = new Intent(getApplicationContext(),ToxService.class);
-    startService(startTox);
+//        File path = new File(Environment.getDataDirectory(),accoutName+".tox");
+//        try {
+//          ToxSingleton.exportDataFile(path);
+//          Log.i(TAG, path.toString());
+//        } catch (Exception e) {
+//          e.printStackTrace();
+//        }
+       return null;
+      }
+    };
+    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
   @Override
@@ -158,6 +166,7 @@ public class ApplicationContext extends MultiDexApplication implements Dependenc
     Log.i(TAG, "App is no longer visible.");
     KeyCachingService.onAppBackgrounded(this);
   }
+
 
   @Override
   public void injectDependencies(Object object) {
